@@ -21,6 +21,13 @@ http.createServer(async ({ url }, res) => {
             res.write(indexJs);
             res.end();      
             break
+        case '/albums':
+            const response = await fetch("https://jsonplaceholder.typicode.com/albums")
+            const json = await response.arrayBuffer()
+            res.writeHead(200, {"Content-Type": "application/json"})
+            res.write(Buffer.from(json));
+            res.end();      
+            break
         default:
             res.writeHead(404)
             res.write('Page not found');
