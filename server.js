@@ -7,9 +7,30 @@ const getFiles = async ()=>{
     return [indexHtml,indexJs]
 }
 
-
 http.createServer(async ({ url }, res) => {
     const [indexHtml, indexJs] = await getFiles()
+
+    if (url.includes('value')) {
+        const inputValue = url.match(/=(\w+(?:%20\w+)*)/g)
+        if (inputValue === null) {
+            return 
+        }
+        const value = inputValue[0].slice(1).replace(/%20/g, ' ')
+        const response = await fetch("https://jsonplaceholder.typicode.com/albums")
+        const json = await response.json()
+        const datafilter = json.filter((x) => {
+            return (
+                inputValue && x.title.includes(value)
+            )   
+        })
+        const data = JSON.stringify(datafilter)
+        const buffer = Buffer.from(data)
+        res.writeHead(200, {"Content-Type": "application/json"})
+        res.write(buffer);
+        res.end()
+        return
+    }
+
     switch(url) {
         case '/':
             res.writeHead(200, {"Content-Type": "text/html"})
@@ -19,13 +40,6 @@ http.createServer(async ({ url }, res) => {
         case '/js':
             res.writeHead(200, {"Content-Type": "text/javascript"})
             res.write(indexJs);
-            res.end();      
-            break
-        case '/albums':
-            const response = await fetch("https://jsonplaceholder.typicode.com/albums")
-            const json = await response.arrayBuffer()
-            res.writeHead(200, {"Content-Type": "application/json"})
-            res.write(Buffer.from(json));
             res.end();      
             break
         default:
