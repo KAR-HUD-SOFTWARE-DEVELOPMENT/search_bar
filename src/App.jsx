@@ -5,18 +5,10 @@ export const App = () => {
     const [value, setValue] = useState('')
     const [responseData, setResponseData] = useState([])
 
-    useEffect( () => {
-        const getData = async () => {
-            const response = await fetch('http://localhost:8008/albums')
-            const data = await response.json()
-            const datafilter = data.filter((x) => {
-                return (
-                    value && x.title.includes(value)
-                )   
-            })
-            setResponseData(datafilter)
-        }
-        getData()
+    useEffect(() => {
+        fetch(`http://localhost:8008/value=${value}`)
+        .then(response => response.json())
+        .then(data => setResponseData(data))
     }, [value])
 
     return (
