@@ -14,7 +14,7 @@ export const App = () => {
     return (
         <div>
             <input value={value} onChange={(e) => setValue(e.target.value)}></input>
-            <div>{responseData.map((result) => {
+            <div>{responseData.map((result) => <div>{result.title}</div>)}</div>
                 return <div>{result.title}</div>
             })}</div>
         </div>
