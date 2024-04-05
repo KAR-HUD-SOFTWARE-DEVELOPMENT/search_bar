@@ -18,7 +18,7 @@ http.createServer(async ({ url }, res) => {
         const value = inputValue[0].slice(1).replace(/%20/g, ' ')
         const response = await fetch("https://jsonplaceholder.typicode.com/albums")
         const json = await response.json()
-        const datafilter = json.filter((x) => {
+        const filteredData = json.filter((album) => album.title.includes(value))
             return (
                 inputValue && x.title.includes(value)
             )   
