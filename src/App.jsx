@@ -6,7 +6,7 @@ export const App = () => {
     const [responseData, setResponseData] = useState([])
 
     useEffect(() => {
-        fetch(`http://localhost:8008/value=${value}`)
+        fetch(`http://localhost:8008/albums?title=${value}`)
         .then(response => response.json())
         .then(data => setResponseData(data))
     }, [value])
