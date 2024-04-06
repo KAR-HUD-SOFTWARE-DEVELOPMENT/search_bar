@@ -9,28 +9,27 @@ const getFiles = async ()=>{
 
 http.createServer(async ({ url }, res) => {
     const [indexHtml, indexJs] = await getFiles()
-
-    if (url.includes('value')) {
+    if (url.includes('albums?title')) {
         const inputValue = url.match(/=(\w+(?:%20\w+)*)/g)
-        if (inputValue === null) {
-            return 
-        }
-        const value = inputValue[0].slice(1).replace(/%20/g, ' ')
         const response = await fetch("https://jsonplaceholder.typicode.com/albums")
         const json = await response.json()
-        const filteredData = json.filter((album) => album.title.includes(value))
-            return (
-                inputValue && x.title.includes(value)
-            )   
+        const filteredData = json.filter((albums) =>{
+        if (inputValue === null) {
+            return albums.title
+        }
+        else {
+           return albums.title.includes(inputValue[0].slice(1).replace(/%20/g, ' ')) 
+        }
         })
-        const data = JSON.stringify(datafilter)
+
+        const data = JSON.stringify(filteredData)
         const buffer = Buffer.from(data)
         res.writeHead(200, {"Content-Type": "application/json"})
         res.write(buffer);
         res.end()
         return
+    
     }
-
     switch(url) {
         case '/':
             res.writeHead(200, {"Content-Type": "text/html"})
