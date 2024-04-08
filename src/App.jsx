@@ -14,7 +14,7 @@ export const App = () => {
     return (
         <div>
             <input value={value} onChange={(e) => setValue(e.target.value)}></input>
-            <div>{responseData.map((result) => <div>{result.title}</div>)}</div>
+            <div>{responseData.map((result, index) => <div key={index}>{result.title}</div>)}</div>
         </div>
     )
 }
