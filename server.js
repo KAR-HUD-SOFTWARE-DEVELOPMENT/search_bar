@@ -13,15 +13,8 @@ http.createServer(async ({ url }, res) => {
         const inputValue = url.match(/=(\w+(?:%20\w+)*)/g)
         const response = await fetch("https://jsonplaceholder.typicode.com/albums")
         const json = await response.json()
-        const filteredData = json.filter((albums) =>{
-        if (inputValue === null) {
-            return albums.title
-        }
-        else {
-           return albums.title.includes(inputValue[0].slice(1).replace(/%20/g, ' ')) 
-        }
-        })
-
+        const filteredData = json.filter((albums) =>
+        inputValue? albums.title.includes(inputValue[0].slice(1).replace(/%20/g, ' ')) : albums.title)
         const data = JSON.stringify(filteredData)
         const buffer = Buffer.from(data)
         res.writeHead(200, {"Content-Type": "application/json"})
