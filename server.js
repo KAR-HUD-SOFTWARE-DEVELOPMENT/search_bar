@@ -10,7 +10,7 @@ const getFiles = async ()=>{
 http.createServer(async ({ url }, res) => {
     const [indexHtml, indexJs] = await getFiles()
     if (url.includes('albums?title')) {
-        const inputValue = url.match(/=(\w+(?:%20\w+)*)/g)
+        const inputValue = url.match(/=(\w+(?:%20\w+)*)/)
         const response = await fetch("https://jsonplaceholder.typicode.com/albums")
         const json = await response.json()
         const filteredData = json.filter((albums) =>
