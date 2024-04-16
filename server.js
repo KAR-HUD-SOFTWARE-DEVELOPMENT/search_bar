@@ -7,9 +7,22 @@ const getFiles = async ()=>{
     return [indexHtml,indexJs]
 }
 
-
 http.createServer(async ({ url }, res) => {
     const [indexHtml, indexJs] = await getFiles()
+    if (url.includes('albums?title')) {
+        const inputValue = url.match(/=(\w+(?:%20\w+)*)/)
+        const response = await fetch("https://jsonplaceholder.typicode.com/albums")
+        const json = await response.json()
+        const filteredData = json.filter((albums) =>
+        inputValue? albums.title.includes(inputValue[0].slice(1).replace(/%20/g, ' ')) : albums.title)
+        const data = JSON.stringify(filteredData)
+        const buffer = Buffer.from(data)
+        res.writeHead(200, {"Content-Type": "application/json"})
+        res.write(buffer);
+        res.end()
+        return
+    
+    }
     switch(url) {
         case '/':
             res.writeHead(200, {"Content-Type": "text/html"})
@@ -19,13 +32,6 @@ http.createServer(async ({ url }, res) => {
         case '/js':
             res.writeHead(200, {"Content-Type": "text/javascript"})
             res.write(indexJs);
-            res.end();      
-            break
-        case '/albums':
-            const response = await fetch("https://jsonplaceholder.typicode.com/albums")
-            const json = await response.arrayBuffer()
-            res.writeHead(200, {"Content-Type": "application/json"})
-            res.write(Buffer.from(json));
             res.end();      
             break
         default:
